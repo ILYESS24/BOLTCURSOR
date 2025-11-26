@@ -27,6 +27,12 @@ export default defineConfig((config) => {
       chrome129IssuePlugin(),
       config.mode === 'production' && optimizeCssModules({ apply: 'build' }),
     ],
+    optimizeDeps: {
+      include: ['react-dom/server']
+    },
+    ssr: {
+      noExternal: ['react-dom']
+    }
   };
 });
 
