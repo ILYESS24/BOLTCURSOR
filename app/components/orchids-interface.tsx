@@ -139,7 +139,9 @@ export default function OrchidsInterface() {
 
       {/* Shader Animation Background */}
       <div className="fixed inset-0 z-0">
-        <ShaderAnimation />
+        <ClientOnly fallback={null}>
+          {() => <ShaderAnimation />}
+        </ClientOnly>
       </div>
 
       <div
