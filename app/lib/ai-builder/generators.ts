@@ -942,7 +942,7 @@ export default function Home() {
       <Head>
         <title>${spec.name}</title>
         <meta name="description" content="${spec.description}" />
-        <link rel="icon" href="/favicon.ico" />
+        {/* <link rel="icon" href="/favicon.svg" /> */}
       </Head>
 
       <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
