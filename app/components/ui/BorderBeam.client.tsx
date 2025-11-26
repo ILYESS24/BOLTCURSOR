@@ -1,5 +1,3 @@
-'use client';
-
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { classNames } from '~/utils/classNames';
