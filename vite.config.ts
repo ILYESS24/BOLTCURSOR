@@ -14,7 +14,7 @@ export default defineConfig((config) => {
       nodePolyfills({
         include: ['path', 'buffer'],
       }),
-      config.mode !== 'test' && remixCloudflareDevProxy(),
+      (config.mode === 'development' || config.mode === 'test') && remixCloudflareDevProxy(),
       remixVitePlugin({
         future: {
           v3_fetcherPersist: true,
@@ -28,7 +28,7 @@ export default defineConfig((config) => {
       config.mode === 'production' && optimizeCssModules({ apply: 'build' }),
     ],
     ssr: {
-      noExternal: ['react-dom']
+      external: ['react-dom/server']
     }
   };
 });
