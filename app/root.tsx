@@ -1,10 +1,7 @@
-import React, { useEffect } from 'react';
-import { useStore } from '@nanostores/react';
+import React from 'react';
 import type { LinksFunction } from '@remix-run/cloudflare';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
 import tailwindReset from '@unocss/reset/tailwind-compat.css?url';
-import { themeStore } from './lib/stores/theme';
-import { stripIndents } from './utils/stripIndent';
 
 import reactToastifyStyles from 'react-toastify/dist/ReactToastify.css?url';
 import globalStyles from './styles/index.scss?url';
@@ -37,19 +34,6 @@ export const links: LinksFunction = () => [
   },
 ];
 
-const inlineThemeCode = stripIndents`
-  setTutorialKitTheme();
-
-  function setTutorialKitTheme() {
-    let theme = localStorage.getItem('bolt_theme');
-
-    if (!theme) {
-      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-
-    document.querySelector('html')?.setAttribute('data-theme', theme);
-  }
-`;
 
 
 export function Layout({ children }: { children: React.ReactNode }) {
