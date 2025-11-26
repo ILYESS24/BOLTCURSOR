@@ -1,4 +1,7 @@
-"use client"
+/**
+ * ShaderAnimation component - Dynamic background animation using Three.js
+ * @useClient
+ */
 
 import { useEffect, useRef } from "react"
 import * as THREE from "three"
