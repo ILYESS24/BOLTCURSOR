@@ -1,0 +1,85 @@
+# 🚀 ARTILLERY LOAD TEST - Simulation de charge réelle
+# Test de tous les systèmes backend avec charge utilisateur
+
+config:
+  target: 'https://c3a0d91d.ai-assistant-xlv.pages.dev'
+  phases:
+    # Phase 1: Montée en charge progressive
+    - duration: 60
+      arrivalRate: 5
+      name: "Montée en charge"
+    # Phase 2: Charge soutenue
+    - duration: 120
+      arrivalRate: 20
+      name: "Charge soutenue"
+    # Phase 3: Pic de charge
+    - duration: 60
+      arrivalRate: 50
+      name: "Pic de charge"
+    # Phase 4: Descente
+    - duration: 30
+      arrivalRate: 10
+      name: "Descente"
+  defaults:
+    headers:
+      User-Agent: "Artillery Load Test"
+      Accept: "application/json"
+  plugins:
+    metrics-by-endpoint:
+      useOnlyRequestNames: true
+
+scenarios:
+  # Scénario 1: Test de l'API Health
+  - name: "Test API Health"
+    weight: 30
+    flow:
+      - get:
+          url: "/api/health"
+          capture:
+            - json: "$.status"
+              as: "health_status"
+          expect:
+            - statusCode: 200
+            - hasProperty: "status"
+      - think: 1
+
+  # Scénario 2: Test de l'interface principale
+  - name: "Test Interface Principale"
+    weight: 40
+    flow:
+      - get:
+          url: "/"
+          expect:
+            - statusCode: 200
+            - contentType: "text/html"
+      - think: 2
+      - get:
+          url: "/api/health"
+          expect:
+            - statusCode: 200
+
+  # Scénario 3: Test de cache et performance
+  - name: "Test Cache et Performance"
+    weight: 20
+    flow:
+      - get:
+          url: "/api/health"
+          capture:
+            - header: "x-response-time"
+              as: "response_time"
+      - think: 0.5
+      - get:
+          url: "/api/health"
+          expect:
+            - statusCode: 200
+      - think: 1
+
+  # Scénario 4: Test de charge intensive
+  - name: "Test Charge Intensive"
+    weight: 10
+    flow:
+      - loop:
+          - get:
+              url: "/api/health"
+          - think: 0.1
+        count: 10

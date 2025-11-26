@@ -1,0 +1,27 @@
+{
+  "autoFix": {
+    "enabled": true,
+    "checks": {
+      "typescript": true,
+      "linting": true,
+      "security": true,
+      "tests": true,
+      "formatting": true
+    },
+    "autoCommit": false,
+    "commitMessage": "AI Assistant auto-fix - {timestamp}",
+    "excludePatterns": ["node_modules/**", "build/**", "dist/**", "*.log"],
+    "includePatterns": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json"]
+  },
+  "scheduling": {
+    "enabled": false,
+    "time": "09:00",
+    "frequency": "daily"
+  },
+  "notifications": {
+    "enabled": true,
+    "onSuccess": true,
+    "onError": true,
+    "onWarning": false
+  }
+}
