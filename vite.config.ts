@@ -28,7 +28,7 @@ export default defineConfig((config) => {
       config.mode === 'production' && optimizeCssModules({ apply: 'build' }),
     ],
     ssr: {
-      external: ['react-dom/server']
+      noExternal: ['react-dom']
     }
   };
 });
