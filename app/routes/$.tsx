@@ -1,4 +1,4 @@
-// Catch-all route for any unmatched URLs
+// Catch-all route for any unmatched URLs - Remix convention
 export async function loader({ request }: { request: Request }) {
   const url = new URL(request.url);
 

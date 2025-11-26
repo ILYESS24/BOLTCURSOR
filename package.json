@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "remix vite:build && node scripts/copy-functions.js",
-    "build:render": "NODE_ENV=production remix vite:build",
+    "build:render": "cross-env NODE_ENV=production remix vite:build",
     "dev": "remix vite:dev",
     "start": "cross-env PORT=${PORT:-8080} remix-serve ./build/server/index.js",
     "start:render": "cross-env PORT=${PORT:-10000} remix-serve ./build/server/index.js",
