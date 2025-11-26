@@ -3,8 +3,6 @@ import { RemixServer } from '@remix-run/react';
 import { isbot } from 'isbot';
 import ReactDOMServer from 'react-dom/server';
 
-const { renderToReadableStream } = ReactDOMServer;
-
 export default async function handleRequest(
   request: Request,
   responseStatusCode: number,
@@ -12,7 +10,7 @@ export default async function handleRequest(
   remixContext: EntryContext,
   _loadContext: AppLoadContext,
 ) {
-  const body = await renderToReadableStream(<RemixServer context={remixContext} url={request.url} />, {
+  const body = await ReactDOMServer.renderToReadableStream(<RemixServer context={remixContext} url={request.url} />, {
     signal: request.signal,
     onError(error: unknown) {
       console.error(error);
