@@ -2,11 +2,8 @@ import React from 'react';
 import type { LinksFunction } from '@remix-run/cloudflare';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
 
-// Temporarily removed CSS imports to fix build
-// import '~/styles/index.scss';
-// import '~/styles/aurion-ui.scss';
-// import '~/styles/components/index.scss';
-// import 'virtual:uno.css';
+// Import basic styles
+import './styles.css';
 
 export const links: LinksFunction = () => [
   // Temporarily removed favicon to avoid routing error

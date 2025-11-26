@@ -10,9 +10,26 @@ export default defineConfig((config) => {
     build: {
       target: 'esnext',
     },
+    resolve: {
+      alias: {
+        path: 'path-browserify',
+      },
+    },
+    optimizeDeps: {
+      include: ['istextorbinary'],
+      exclude: ['path'],
+    },
+    optimizeDeps: {
+      include: ['istextorbinary'],
+    },
     plugins: [
       nodePolyfills({
-        include: ['path', 'buffer'],
+        include: ['path', 'buffer', 'fs', 'os', 'crypto'],
+        globals: {
+          Buffer: true,
+          global: true,
+          process: true,
+        },
       }),
       (config.mode === 'development' || config.mode === 'test') && remixCloudflareDevProxy(),
       remixVitePlugin({
