@@ -10,14 +10,21 @@ export default async function handleRequest(
   remixContext: EntryContext,
   _loadContext: AppLoadContext,
 ) {
-  let html: string;
-  try {
-    html = renderToString(<RemixServer context={remixContext} url={request.url} />);
-  } catch (error) {
-    console.error('SSR Error:', error);
-    responseStatusCode = 500;
-    html = '<html><body><h1>Server Error</h1><p>Something went wrong on the server.</p></body></html>';
-  }
+  // Simple HTML response without React SSR to avoid getCurrentStack error
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Test - Aurion</title>
+</head>
+<body>
+  <div style="padding: 20px; font-family: Arial, sans-serif;">
+    <h1 style="color: #fff; font-size: 2rem; margin-bottom: 1rem;">Test - Aurion</h1>
+    <p style="color: #ccc; font-size: 1.1rem; line-height: 1.6;">Page de test simplifiée</p>
+  </div>
+</body>
+</html>`;
 
   responseHeaders.set('Content-Type', 'text/html');
   responseHeaders.set('Cross-Origin-Embedder-Policy', 'require-corp');
@@ -25,6 +32,6 @@ export default async function handleRequest(
 
   return new Response(html, {
     headers: responseHeaders,
-    status: responseStatusCode,
+    status: 200,
   });
 }
