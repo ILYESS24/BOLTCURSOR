@@ -1,141 +1,119 @@
 export default function Index() {
-  // Timestamp pour prouver que c'est la nouvelle version
-  const deployTime = new Date().toLocaleString('fr-FR', {
-    timeZone: 'Europe/Paris',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  });
-
   return (
-    <div style={{
-      background: 'linear-gradient(45deg, #ff0000, #00ff00, #0000ff)',
-      backgroundSize: '400% 400%',
-      animation: 'gradientShift 3s ease infinite',
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '20px'
-    }}>
-      <style>
-        {`
-          @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-          }
-          .pulse {
-            animation: pulse 2s infinite;
-          }
-          @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-          }
-        `}
-      </style>
+    <html>
+      <head>
+        <title>AURION DEPLOYE - TEST FINAL</title>
+        <style>
+          {`
+            body {
+              margin: 0;
+              padding: 0;
+              font-family: Arial, sans-serif;
+              background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080);
+              background-size: 400% 400%;
+              animation: rainbow 3s linear infinite;
+              min-height: 100vh;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
 
-      <h1 style={{
-        fontSize: '6rem',
-        color: 'white',
-        textAlign: 'center',
-        fontWeight: 'bold',
-        textShadow: '0 0 30px rgba(255,255,255,0.8)',
-        marginBottom: '20px'
-      }}>
-        🎉 AURION LIVE 🎉
-      </h1>
+            @keyframes rainbow {
+              0% { background-position: 0% 50%; }
+              50% { background-position: 100% 50%; }
+              100% { background-position: 0% 50%; }
+            }
 
-      <div style={{
-        background: 'rgba(255, 255, 255, 0.95)',
-        padding: '40px',
-        borderRadius: '20px',
-        boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
-        textAlign: 'center',
-        maxWidth: '800px',
-        backdropFilter: 'blur(10px)',
-        border: '3px solid #ff6b6b'
-      }}>
-        <h2 style={{
-          fontSize: '3rem',
-          color: '#ff6b6b',
-          marginBottom: '20px',
-          fontWeight: 'bold'
-        }}>
-          🚀 DÉPLOIEMENT RÉUSSI ! 🚀
-        </h2>
+            .container {
+              background: rgba(255, 255, 255, 0.95);
+              padding: 50px;
+              border-radius: 25px;
+              box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+              text-align: center;
+              max-width: 900px;
+              border: 5px solid #ff6b6b;
+            }
 
-        <p style={{
-          fontSize: '1.8rem',
-          color: '#333',
-          marginBottom: '30px',
-          lineHeight: '1.6'
-        }}>
-          Votre application <strong>AURION</strong> fonctionne parfaitement !
-        </p>
+            h1 {
+              font-size: 7rem;
+              color: #ff0000;
+              margin-bottom: 30px;
+              text-shadow: 0 0 40px rgba(255,0,0,0.8);
+              animation: pulse 2s infinite;
+            }
 
-        <div style={{
-          background: '#ff4757',
-          color: 'white',
-          padding: '20px',
-          borderRadius: '15px',
-          fontSize: '1.5rem',
-          fontWeight: 'bold',
-          marginBottom: '20px'
-        }}>
-          ⏰ DÉPLOYÉ LE : {deployTime}
+            @keyframes pulse {
+              0%, 100% { transform: scale(1); }
+              50% { transform: scale(1.1); }
+            }
+
+            h2 {
+              font-size: 4rem;
+              color: #0000ff;
+              margin-bottom: 30px;
+              font-weight: bold;
+            }
+
+            .timestamp {
+              background: #ff4757;
+              color: white;
+              padding: 25px;
+              border-radius: 20px;
+              font-size: 2rem;
+              font-weight: bold;
+              margin: 30px 0;
+              display: inline-block;
+            }
+
+            .indicators {
+              display: flex;
+              gap: 30px;
+              justify-content: center;
+              flex-wrap: wrap;
+              margin-top: 40px;
+            }
+
+            .indicator {
+              background: #4CAF50;
+              color: white;
+              padding: 15px 30px;
+              border-radius: 30px;
+              font-size: 1.5rem;
+              font-weight: bold;
+              box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            }
+          `}
+        </style>
+      </head>
+      <body>
+        <div className="container">
+          <h1>🎉 AURION DEPLOYE 🎉</h1>
+          <h2>🚀 TEST FINAL RÉUSSI 🚀</h2>
+
+          <div className="timestamp">
+            ⏰ CHARGÉ LE: {new Date().toLocaleString('fr-FR', {
+              timeZone: 'Europe/Paris',
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit'
+            })}
+          </div>
+
+          <p style={{ fontSize: '1.8rem', color: '#333', marginBottom: '40px' }}>
+            SI VOUS VOYEZ ÇA, VOTRE DÉPLOIEMENT MARCHE PARFAITEMENT !
+          </p>
+
+          <div className="indicators">
+            <span className="indicator">✅ CODE OK</span>
+            <span className="indicator">✅ BUILD OK</span>
+            <span className="indicator">✅ DEPLOIEMENT OK</span>
+            <span className="indicator">✅ CACHE OK</span>
+          </div>
         </div>
-
-        <p style={{
-          fontSize: '1.4rem',
-          color: '#666',
-          marginBottom: '30px'
-        }}>
-          Si vous voyez ce message, votre déploiement automatique fonctionne ! 🎯
-        </p>
-
-        <div style={{
-          display: 'flex',
-          gap: '20px',
-          justifyContent: 'center',
-          flexWrap: 'wrap'
-        }}>
-          <span style={{
-            background: '#ff6b6b',
-            color: 'white',
-            padding: '10px 20px',
-            borderRadius: '25px',
-            fontSize: '1.2rem',
-            fontWeight: 'bold'
-          }}>
-            ✅ Code OK
-          </span>
-          <span style={{
-            background: '#4ecdc4',
-            color: 'white',
-            padding: '10px 20px',
-            borderRadius: '25px',
-            fontSize: '1.2rem',
-            fontWeight: 'bold'
-          }}>
-            ✅ Build OK
-          </span>
-          <span style={{
-            background: '#45b7d1',
-            color: 'white',
-            padding: '10px 20px',
-            borderRadius: '25px',
-            fontSize: '1.2rem',
-            fontWeight: 'bold'
-          }}>
-            ✅ Déploiement OK
-          </span>
-        </div>
-      </div>
-    </div>
+      </body>
+    </html>
   );
 }
