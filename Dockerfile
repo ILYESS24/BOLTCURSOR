@@ -27,4 +27,4 @@ ENV NODE_ENV=production
 ENV PORT=8080
 
 # Start the application
-CMD ["pnpm", "run", "start:render"]
+CMD ["pnpm", "run", "start"]
