@@ -3,11 +3,12 @@ import type { LinksFunction } from '@remix-run/cloudflare';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
 
 export const links: LinksFunction = () => [
-  {
-    rel: 'icon',
-    href: '/favicon.svg',
-    type: 'image/svg+xml',
-  },
+  // Temporarily removed favicon to avoid routing error
+  // {
+  //   rel: 'icon',
+  //   href: '/favicon.svg',
+  //   type: 'image/svg+xml',
+  // },
 ];
 
 
