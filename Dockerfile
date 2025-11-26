@@ -13,6 +13,9 @@ COPY package.json pnpm-lock.yaml ./
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
+# Install remix-serve for production runtime
+RUN pnpm add -D @remix-run/serve
+
 # Copy source code
 COPY . .
 
