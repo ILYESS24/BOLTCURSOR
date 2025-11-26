@@ -1,7 +1,7 @@
 import type { AppLoadContext, EntryContext } from '@remix-run/cloudflare';
 import { RemixServer } from '@remix-run/react';
 import { isbot } from 'isbot';
-import ReactDOMServer from 'react-dom/server';
+import { renderToString } from 'react-dom/server';
 
 export default async function handleRequest(
   request: Request,
@@ -10,24 +10,20 @@ export default async function handleRequest(
   remixContext: EntryContext,
   _loadContext: AppLoadContext,
 ) {
-  const body = await ReactDOMServer.renderToReadableStream(<RemixServer context={remixContext} url={request.url} />, {
-    signal: request.signal,
-    onError(error: unknown) {
-      console.error(error);
-      responseStatusCode = 500;
-    },
-  });
-
-  if (isbot(request.headers.get('user-agent') || '')) {
-    await body.allReady;
+  let html: string;
+  try {
+    html = renderToString(<RemixServer context={remixContext} url={request.url} />);
+  } catch (error) {
+    console.error('SSR Error:', error);
+    responseStatusCode = 500;
+    html = '<html><body><h1>Server Error</h1><p>Something went wrong on the server.</p></body></html>';
   }
 
   responseHeaders.set('Content-Type', 'text/html');
-
   responseHeaders.set('Cross-Origin-Embedder-Policy', 'require-corp');
   responseHeaders.set('Cross-Origin-Opener-Policy', 'same-origin');
 
-  return new Response(body, {
+  return new Response(html, {
     headers: responseHeaders,
     status: responseStatusCode,
   });
