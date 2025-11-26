@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "build": "remix vite:build && node scripts/copy-functions.js",
+    "build:render": "CF_PAGES=0 remix vite:build",
     "dev": "remix vite:dev",
     "start": "PORT=${PORT:-8080} remix-serve ./build/server/index.js",
-    "start:render": "PORT=${PORT:-10000} remix-serve ./build/server/index.js",
+    "start:render": "PORT=${PORT:-10000} remix-serve ./dist/server/index.js",
     "typecheck": "tsc",
     "deploy": "wrangler pages deploy build/client",
     "test": "playwright test",
