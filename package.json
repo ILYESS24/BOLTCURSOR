@@ -104,7 +104,7 @@
     "path-browserify": "^1.0.1",
     "playwright": "1.56.1",
     "prettier": "3.6.2",
-    "svelte": "4.2.20",
+    "svelte": "5.45.2",
     "typescript": "5.9.3",
     "unified": "11.0.5",
     "unocss": "66.5.4",
