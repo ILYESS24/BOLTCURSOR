@@ -12,5 +12,5 @@ export const meta: MetaFunction = () => {
 export const loader = () => json({});
 
 export default function Index() {
-  return <OrchidsInterface />;
+  return <div>Hello World</div>;
 }
