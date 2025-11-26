@@ -1,10 +1,15 @@
-// Handle favicon.ico requests by redirecting to favicon.svg
+// Handle favicon.ico requests by serving the favicon.svg content directly
 export async function loader() {
-  // Redirect to the actual favicon.svg file
-  return new Response(null, {
-    status: 302,
+  const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <rect width="16" height="16" rx="2" fill="#1389fd" />
+  <path d="M7.398 9.091h-3.58L10.364 2 8.602 6.909h3.58L5.636 14l1.762-4.909Z" fill="#fff" />
+</svg>`;
+
+  return new Response(faviconSvg, {
+    status: 200,
     headers: {
-      Location: '/favicon.svg',
+      'Content-Type': 'image/svg+xml',
+      'Cache-Control': 'public, max-age=31536000',
     },
   });
 }
