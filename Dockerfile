@@ -1,20 +1,23 @@
 # Use Node.js 20 LTS
 FROM node:20-alpine
 
+# Install pnpm
+RUN npm install -g pnpm
+
 # Set working directory
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json pnpm-lock.yaml ./
 
 # Install dependencies
-RUN npm ci --only=production
+RUN pnpm install --frozen-lockfile --prod
 
 # Copy source code
 COPY . .
 
 # Build the application
-RUN npm run build
+RUN pnpm run build
 
 # Expose port
 EXPOSE 8080
@@ -24,4 +27,4 @@ ENV NODE_ENV=production
 ENV PORT=8080
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]
