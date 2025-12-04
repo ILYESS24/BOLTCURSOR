@@ -10,6 +10,7 @@ interface Env {
   OPENAI_API_KEY?: string;
   ANTHROPIC_API_KEY?: string;
   DEEPSEEK_API_KEY?: string;
+  OPENROUTER_API_KEY?: string;
 }
 
 interface ChatMessage {
@@ -41,6 +42,7 @@ class AIService {
   private openaiApiKey: string;
   private anthropicApiKey: string;
   private deepseekApiKey: string;
+  private openrouterApiKey: string;
   private env?: Env;
 
   constructor(env?: Env) {
@@ -50,6 +52,7 @@ class AIService {
     this.openaiApiKey = env?.OPENAI_API_KEY || process.env.OPENAI_API_KEY || '';
     this.anthropicApiKey = env?.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY || '';
     this.deepseekApiKey = env?.DEEPSEEK_API_KEY || process.env.DEEPSEEK_API_KEY || '';
+    this.openrouterApiKey = env?.OPENROUTER_API_KEY || process.env.OPENROUTER_API_KEY || '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';
   }
 
   public async chat(request: ChatRequest): Promise<ChatResponse> {
@@ -65,7 +68,9 @@ class AIService {
       { id: 'deepseek-chat', provider: 'deepseek' },
       { id: 'gpt-3.5-turbo', provider: 'openai' },
       { id: 'claude-3-haiku', provider: 'anthropic' },
-      { id: 'claude-3-sonnet', provider: 'anthropic' }
+      { id: 'claude-3-sonnet', provider: 'anthropic' },
+      { id: 'anthropic/claude-3-haiku', provider: 'openrouter' },
+      { id: 'openai/gpt-3.5-turbo', provider: 'openrouter' }
     ];
     
     let lastError: Error | null = null;
@@ -82,6 +87,9 @@ class AIService {
       } else if (aiModel.provider === 'deepseek') {
         triedProviders.add('deepseek');
         return await this.chatWithDeepSeek(request, aiModel);
+      } else if (aiModel.provider === 'openrouter') {
+        triedProviders.add('openrouter');
+        return await this.chatWithOpenRouter(request, aiModel);
       } else {
         throw new Error(`Provider non supporté: ${aiModel.provider}`);
       }
@@ -103,6 +111,7 @@ class AIService {
           if (fallback.provider === 'openai' && !this.openaiApiKey) continue;
           if (fallback.provider === 'anthropic' && !this.anthropicApiKey) continue;
           if (fallback.provider === 'deepseek' && !this.deepseekApiKey) continue;
+          if (fallback.provider === 'openrouter' && !this.openrouterApiKey) continue;
           
           try {
             triedProviders.add(fallback.provider);
@@ -113,6 +122,8 @@ class AIService {
               return await this.chatWithAnthropic(request, fallbackModel);
             } else if (fallback.provider === 'deepseek') {
               return await this.chatWithDeepSeek(request, fallbackModel);
+            } else if (fallback.provider === 'openrouter') {
+              return await this.chatWithOpenRouter(request, fallbackModel);
             }
           } catch (fallbackError) {
             lastError = fallbackError as Error;
@@ -370,21 +381,105 @@ class AIService {
     };
   }
 
+  private async chatWithOpenRouter(request: ChatRequest, model: any): Promise<ChatResponse> {
+    if (!this.openrouterApiKey) {
+      throw new Error('Clé API OpenRouter non configurée');
+    }
+
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${this.openrouterApiKey}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://bolt.new',
+        'X-Title': 'Bolt.new AI Assistant'
+      },
+      body: JSON.stringify({
+        model: model.id,
+        messages: request.messages,
+        temperature: request.temperature || 0.7,
+        max_tokens: request.maxTokens || model.maxTokens,
+        stream: request.stream || false
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      let errorData;
+      try {
+        errorData = JSON.parse(errorText);
+      } catch {
+        errorData = { message: errorText };
+      }
+
+      // Détecter les erreurs de quota/rate limit/payment
+      if (response.status === 429 || response.status === 402 ||
+          errorText.includes('quota') || errorText.includes('insufficient') ||
+          errorText.includes('rate limit') || errorText.includes('payment') ||
+          errorText.includes('billing') || errorText.includes('credit')) {
+        const quotaError = new Error(`Quota OpenRouter insuffisant, crédits épuisés ou paiement requis`);
+        (quotaError as any).status = response.status;
+        (quotaError as any).isQuotaError = true;
+        (quotaError as any).provider = 'openrouter';
+        throw quotaError;
+      }
+
+      throw new Error(`Erreur OpenRouter: ${response.status} - ${errorData.error?.message || errorText}`);
+    }
+
+    const data = await response.json();
+
+    return {
+      content: data.choices[0].message.content,
+      model: model.id,
+      usage: {
+        promptTokens: data.usage?.prompt_tokens || 0,
+        completionTokens: data.usage?.completion_tokens || 0,
+        totalTokens: data.usage?.total_tokens || 0
+      },
+      cost: estimateCost(model.id, data.usage?.prompt_tokens || 0, data.usage?.completion_tokens || 0),
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  public async fetchOpenRouterModels(): Promise<any[]> {
+    if (!this.openrouterApiKey) {
+      throw new Error('Clé API OpenRouter non configurée');
+    }
+
+    const response = await fetch('https://openrouter.ai/api/v1/models', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${this.openrouterApiKey}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erreur lors de la récupération des modèles OpenRouter: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.data || [];
+  }
+
   public isConfigured(): boolean {
-    return !!(this.openaiApiKey || this.anthropicApiKey || this.deepseekApiKey);
+    return !!(this.openaiApiKey || this.anthropicApiKey || this.deepseekApiKey || this.openrouterApiKey);
   }
 
   public getConfigurationStatus(): {
     openai: boolean;
     anthropic: boolean;
     deepseek: boolean;
+    openrouter: boolean;
     configured: boolean;
   } {
     return {
       openai: !!this.openaiApiKey,
       anthropic: !!this.anthropicApiKey,
       deepseek: !!this.deepseekApiKey,
-      configured: !!(this.openaiApiKey || this.anthropicApiKey || this.deepseekApiKey)
+      openrouter: !!this.openrouterApiKey,
+      configured: !!(this.openaiApiKey || this.anthropicApiKey || this.deepseekApiKey || this.openrouterApiKey)
     };
   }
 }
@@ -405,6 +500,7 @@ export const aiService = {
   analyzeCode: (code: string, language?: string, env?: Env) => getAIService(env).analyzeCode(code, language),
   generateDocumentation: (code: string, language?: string, env?: Env) => getAIService(env).generateDocumentation(code, language),
   getAvailableModels: (env?: Env) => getAIService(env).getAvailableModels(),
+  fetchOpenRouterModels: (env?: Env) => getAIService(env).fetchOpenRouterModels(),
   isConfigured: (env?: Env) => getAIService(env).isConfigured(),
   getConfigurationStatus: (env?: Env) => getAIService(env).getConfigurationStatus()
 };

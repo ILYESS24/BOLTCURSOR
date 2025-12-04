@@ -12,7 +12,9 @@ const menuVariants = {
   closed: {
     opacity: 0,
     visibility: 'hidden',
-    left: '-150px',
+    pointerEvents: 'none',
+    left: '-400px', // Plus loin pour être sûr
+    transform: 'translateX(-100%)',
     transition: {
       duration: 0.2,
       ease: cubicEasingFn,
@@ -20,8 +22,10 @@ const menuVariants = {
   },
   open: {
     opacity: 1,
-    visibility: 'initial',
+    visibility: 'visible',
+    pointerEvents: 'auto',
     left: 0,
+    transform: 'translateX(0)',
     transition: {
       duration: 0.2,
       ease: cubicEasingFn,
@@ -121,7 +125,9 @@ export function Menu() {
           ),
           linear-gradient(90deg, #D32F2F 0%, #E53935 20%, #EF4444 40%, #F87171 60%, #DC2626 80%, #C62828 100%)
         `,
-        opacity: 1,
+        opacity: open ? 1 : 0,
+        visibility: open ? 'visible' : 'hidden',
+        pointerEvents: open ? 'auto' : 'none',
         backdropFilter: 'none',
         backgroundColor: '#D32F2F',
       }}

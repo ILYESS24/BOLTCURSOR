@@ -19,9 +19,6 @@ export default defineConfig((config) => {
       include: ['istextorbinary'],
       exclude: ['path'],
     },
-    optimizeDeps: {
-      include: ['istextorbinary'],
-    },
     plugins: [
       nodePolyfills({
         include: ['path', 'buffer', 'fs', 'os', 'crypto'],

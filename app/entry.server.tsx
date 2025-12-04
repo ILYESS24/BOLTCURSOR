@@ -10,19 +10,29 @@ export default async function handleRequest(
   remixContext: EntryContext,
   _loadContext: AppLoadContext,
 ) {
-  // Simple HTML response without React SSR to avoid getCurrentStack error
+  const body = await renderToString(
+    <RemixServer context={remixContext} url={request.url} />,
+  );
+
   const html = `<!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Test - Aurion</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Aurion - L'ingénieur IA fullstack qui transforme vos idées en réalité" />
+  <title>Aurion - AI Fullstack Engineer</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/favicon.ico" />
+  <meta property="og:title" content="Aurion - AI Fullstack Engineer" />
+  <meta property="og:description" content="Créez des applications complètes en quelques secondes avec l'IA" />
+  <meta property="og:image" content="/project-visibility.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Aurion - AI Fullstack Engineer" />
+  <meta name="twitter:description" content="Créez des applications complètes en quelques secondes avec l'IA" />
+  <meta name="twitter:image" content="/social_preview_index.jpg" />
 </head>
 <body>
-  <div style="padding: 20px; font-family: Arial, sans-serif;">
-    <h1 style="color: #fff; font-size: 2rem; margin-bottom: 1rem;">Test - Aurion</h1>
-    <p style="color: #ccc; font-size: 1.1rem; line-height: 1.6;">Page de test simplifiée</p>
-  </div>
+  <div id="root">${body}</div>
 </body>
 </html>`;
 
@@ -32,6 +42,6 @@ export default async function handleRequest(
 
   return new Response(html, {
     headers: responseHeaders,
-    status: 200,
+    status: responseStatusCode,
   });
 }
