@@ -65,7 +65,7 @@
     "isbot": "5.1.31",
     "istextorbinary": "9.5.0",
     "jose": "6.1.0",
-    "lucide-react": "^0.553.0",
+    "lucide-react": "^0.555.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-hotkeys-hook": "5.2.1",
