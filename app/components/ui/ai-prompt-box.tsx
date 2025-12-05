@@ -890,6 +890,8 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
 
   const { onSend = () => {}, isLoading = false, placeholder = "Décrivez votre application IA...", className } = props;
 
+  // Force update cache
+
   const [input, setInput] = useState("");
 
   const [files, setFiles] = useState<File[]>([]);
