@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURION - Couleurs Vives</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -10;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 28rem;
+        }
+
+        .title {
+            font-size: 3.75rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 3rem;
+            letter-spacing: 0.25em;
+            text-shadow: 0 4px 20px rgba(255,255,255,0.3);
+            text-align: center;
+        }
+
+        .input-container {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        textarea {
+            width: 100%;
+            background: transparent;
+            color: white;
+            border: none;
+            outline: none;
+            resize: none;
+            min-height: 3.75rem;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.75rem;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        button:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+        }
+
+        button:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        button:not(:disabled):hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .footer {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.875rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .color-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            max-width: 250px;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+    <!-- Info sur les couleurs -->
+    <div class="color-info">
+        <strong>Couleurs VIVES corrigées:</strong><br>
+        🟠 Orange: rgb(255, 140, 0)<br>
+        🟡 Jaune: rgb(255, 215, 0)<br>
+        🟣 Magenta: rgb(255, 0, 150)<br>
+        <em>Saturation boost x1.2</em>
+    </div>
+
+    <!-- Canvas avec couleurs vives -->
+    <canvas id="vivid-canvas"></canvas>
+
+    <!-- Content -->
+    <div class="content">
+        <h1 class="title">AURION</h1>
+
+        <div class="input-container">
+            <textarea placeholder="Tapez votre message..." rows="1"></textarea>
+            <div class="button-container">
+                <button>Envoyer</button>
+            </div>
+        </div>
+
+        <p class="footer">Interface IA - Couleurs Vives Corrigées ✨</p>
+    </div>
+
+    <script>
+        // Générer avec COULEURS VIVES corrigées
+        const canvas = document.getElementById('vivid-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        function generateVividGrainGradient(width, height, time) {
+            const imageData = ctx.createImageData(width, height);
+            const data = imageData.data;
+
+            for (let i = 0; i < data.length; i += 4) {
+                const x = (i / 4) % width;
+                const y = Math.floor(i / 4 / width);
+
+                const nx = x / width;
+                const ny = y / height;
+
+                // Distance aux coins (shape="corners")
+                const cornerDistances = [
+                    Math.sqrt(nx * nx + ny * ny),
+                    Math.sqrt((1-nx) * (1-nx) + ny * ny),
+                    Math.sqrt(nx * nx + (1-ny) * (1-ny)),
+                    Math.sqrt((1-nx) * (1-nx) + (1-ny) * (1-ny))
+                ];
+
+                const minCornerDist = Math.min(...cornerDistances);
+                const softness = 0.76;
+                const intensity = 0.45;
+                let grainEffect = Math.pow(1 - minCornerDist, softness) * intensity;
+
+                // Bruit animé
+                const noise = Math.sin(x * 0.005 + time * 0.001) * Math.cos(y * 0.005 + time * 0.001);
+                grainEffect += noise * 0.1;
+                grainEffect = Math.max(0, Math.min(1, grainEffect));
+
+                // COULEURS VIVES DIRECTES (au lieu de HSL complexe)
+                const colors = [
+                    { r: 255, g: 140, b: 0 },    // Orange VIF
+                    { r: 255, g: 215, b: 0 },    // Jaune VIF
+                    { r: 255, g: 0, b: 150 }     // Magenta VIF
+                ];
+
+                const colorIndex = Math.floor(grainEffect * (colors.length - 1));
+                const colorProgress = (grainEffect * (colors.length - 1)) % 1;
+
+                const color1 = colors[colorIndex];
+                const color2 = colors[Math.min(colorIndex + 1, colors.length - 1)];
+
+                // Interpolation RGB directe
+                const r = Math.floor(color1.r + (color2.r - color1.r) * colorProgress);
+                const g = Math.floor(color1.g + (color2.g - color1.g) * colorProgress);
+                const b = Math.floor(color1.b + (color2.b - color1.b) * colorProgress);
+
+                // Facteur de saturation pour couleurs VIVES
+                const saturationFactor = 1.2;
+                const finalR = Math.min(255, Math.max(0, Math.floor(r * saturationFactor)));
+                const finalG = Math.min(255, Math.max(0, Math.floor(g * saturationFactor)));
+                const finalB = Math.min(255, Math.max(0, Math.floor(b * saturationFactor)));
+
+                data[i] = finalR;
+                data[i + 1] = finalG;
+                data[i + 2] = finalB;
+                data[i + 3] = Math.floor(grainEffect * 255 * 0.8);
+            }
+
+            return imageData;
+        }
+
+        // Animation
+        let startTime = Date.now();
+
+        function animate() {
+            const currentTime = Date.now() - startTime;
+            const imageData = generateVividGrainGradient(canvas.width, canvas.height, currentTime);
+            ctx.putImageData(imageData, 0, 0);
+            requestAnimationFrame(animate);
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        animate();
+    </script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURION - Client Grain Shader</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        @keyframes grainAnimation {
+            0%, 100% {
+                background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+            }
+            25% {
+                background-position: -10% -10%, 20% -5%, -15% 10%, 5% -8%, 25% 15%;
+            }
+            50% {
+                background-position: 15% -20%, -25% 5%, 10% 20%, -5% 12%, -20% -10%;
+            }
+            75% {
+                background-position: -5% 15%, 15% -10%, -20% -5%, 20% 8%, 10% 25%;
+            }
+        }
+
+        @keyframes particleFloat {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px) scale(1);
+                opacity: 0.2;
+            }
+            25% {
+                transform: translateY(-30px) translateX(20px) scale(1.2);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translateY(20px) translateX(-30px) scale(0.8);
+                opacity: 0.3;
+            }
+            75% {
+                transform: translateY(-40px) translateX(-15px) scale(1.1);
+                opacity: 0.5;
+            }
+        }
+
+        .grain-shader-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 80%, hsl(14, 100%, 57%) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, hsl(45, 100%, 51%) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, hsl(340, 82%, 52%) 0%, transparent 50%),
+                radial-gradient(circle at 60% 10%, hsl(14, 100%, 57%) 0%, transparent 40%),
+                radial-gradient(circle at 10% 60%, hsl(45, 100%, 51%) 0%, transparent 45%),
+                linear-gradient(135deg, hsl(14, 100%, 57%), hsl(45, 100%, 51%), hsl(340, 82%, 52%));
+            animation: grainAnimation 8s ease-in-out infinite;
+        }
+
+        .grain-texture-overlay {
+            position: absolute;
+            inset: 0;
+            background-image:
+                repeating-radial-gradient(circle at 25% 25%, rgba(255,255,255,0.08) 1px, transparent 1px),
+                repeating-radial-gradient(circle at 75% 75%, rgba(255,255,255,0.06) 1px, transparent 1px),
+                repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,0.04) 0deg, transparent 1deg, transparent 2deg, rgba(255,255,255,0.03) 3deg),
+                radial-gradient(circle at 30% 70%, rgba(255,255,255,0.05) 0%, transparent 30%),
+                radial-gradient(circle at 70% 30%, rgba(255,255,255,0.04) 0%, transparent 25%);
+            background-size:
+                150px 150px,
+                200px 200px,
+                100px 100px,
+                180px 180px,
+                120px 120px;
+            animation: grainAnimation 12s ease-in-out infinite reverse;
+            opacity: 0.7;
+        }
+
+        .animated-grain-particles {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .grain-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            animation: particleFloat linear infinite;
+        }
+
+        .grain-particle:nth-child(1) {
+            width: 3px; height: 3px;
+            left: 15%; top: 25%;
+            animation-duration: 8s;
+            animation-delay: 0s;
+        }
+        .grain-particle:nth-child(2) {
+            width: 2px; height: 2px;
+            left: 75%; top: 15%;
+            animation-duration: 10s;
+            animation-delay: -2s;
+        }
+        .grain-particle:nth-child(3) {
+            width: 4px; height: 4px;
+            left: 35%; top: 70%;
+            animation-duration: 12s;
+            animation-delay: -4s;
+        }
+        .grain-particle:nth-child(4) {
+            width: 2px; height: 2px;
+            left: 85%; top: 60%;
+            animation-duration: 9s;
+            animation-delay: -6s;
+        }
+        .grain-particle:nth-child(5) {
+            width: 3px; height: 3px;
+            left: 25%; top: 85%;
+            animation-duration: 11s;
+            animation-delay: -1s;
+        }
+        .grain-particle:nth-child(6) {
+            width: 2px; height: 2px;
+            left: 65%; top: 40%;
+            animation-duration: 7s;
+            animation-delay: -3s;
+        }
+        .grain-particle:nth-child(7) {
+            width: 3px; height: 3px;
+            left: 45%; top: 10%;
+            animation-duration: 13s;
+            animation-delay: -5s;
+        }
+        .grain-particle:nth-child(8) {
+            width: 2px; height: 2px;
+            left: 5%; top: 50%;
+            animation-duration: 10s;
+            animation-delay: -7s;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 28rem;
+        }
+
+        .title {
+            font-size: 3.75rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 3rem;
+            letter-spacing: 0.25em;
+            text-shadow: 0 4px 20px rgba(255,255,255,0.3);
+            text-align: center;
+        }
+
+        .input-container {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        textarea {
+            width: 100%;
+            background: transparent;
+            color: white;
+            border: none;
+            outline: none;
+            resize: none;
+            min-height: 3.75rem;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.75rem;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        button:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+        }
+
+        button:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        button:not(:disabled):hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .footer {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.875rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Client Grain Shader Background -->
+    <div style="position: fixed; inset: 0; z-index: -10;">
+        <div class="grain-shader-bg"></div>
+        <div class="grain-texture-overlay"></div>
+        <div class="animated-grain-particles">
+            <div class="grain-particle"></div>
+            <div class="grain-particle"></div>
+            <div class="grain-particle"></div>
+            <div class="grain-particle"></div>
+            <div class="grain-particle"></div>
+            <div class="grain-particle"></div>
+            <div class="grain-particle"></div>
+            <div class="grain-particle"></div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <h1 class="title">AURION</h1>
+
+        <div class="input-container">
+            <textarea placeholder="Tapez votre message..." rows="1"></textarea>
+            <div class="button-container">
+                <button>Envoyer</button>
+            </div>
+        </div>
+
+        <p class="footer">Interface IA - Client Grain Shader ✨</p>
+    </div>
+</body>
+</html>

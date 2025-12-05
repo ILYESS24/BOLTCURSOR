@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURION - CSS Shader Final</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        @keyframes grainNoise {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.4;
+            }
+            25% {
+                transform: translate(-20px, -30px) scale(1.1);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translate(30px, -20px) scale(0.9);
+                opacity: 0.3;
+            }
+            75% {
+                transform: translate(-25px, 25px) scale(1.2);
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes filmGrain {
+            0%, 100% {
+                background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+            }
+            25% {
+                background-position: -15% -20%, 25% -10%, -10% 15%, 20% -5%, -25% 10%;
+            }
+            50% {
+                background-position: 20% -25%, -20% 10%, 15% 25%, -5% 20%, 30% -15%;
+            }
+            75% {
+                background-position: -25% 20%, 10% 30%, -15% -10%, 25% 5%, -10% 25%;
+            }
+        }
+
+        @keyframes particleFloat {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px) scale(1) rotate(0deg);
+                opacity: 0.3;
+            }
+            33% {
+                transform: translateY(-50px) translateX(40px) scale(1.2) rotate(120deg);
+                opacity: 0.6;
+            }
+            66% {
+                transform: translateY(30px) translateX(-60px) scale(0.8) rotate(240deg);
+                opacity: 0.2;
+            }
+        }
+
+        @keyframes colorShift {
+            0%, 100% {
+                filter: brightness(1.1) contrast(1.1) saturate(1.2);
+            }
+            50% {
+                filter: brightness(1.3) contrast(1.3) saturate(1.4);
+            }
+        }
+
+        .shader-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 80%, hsl(14, 100%, 57%) 0%, transparent 60%),
+                radial-gradient(circle at 80% 20%, hsl(45, 100%, 51%) 0%, transparent 55%),
+                radial-gradient(circle at 40% 40%, hsl(340, 82%, 52%) 0%, transparent 65%),
+                radial-gradient(circle at 60% 10%, hsl(14, 100%, 57%) 0%, transparent 50%),
+                radial-gradient(circle at 10% 60%, hsl(45, 100%, 51%) 0%, transparent 45%),
+                linear-gradient(135deg,
+                  hsl(14, 100%, 57%),
+                  hsl(45, 100%, 51%),
+                  hsl(340, 82%, 52%)
+                );
+            animation: colorShift 6s ease-in-out infinite;
+        }
+
+        .grain-overlay {
+            position: absolute;
+            inset: 0;
+            background-image:
+                repeating-radial-gradient(circle at 25% 25%, rgba(255,255,255,0.08) 1px, transparent 1px),
+                repeating-radial-gradient(circle at 75% 75%, rgba(255,255,255,0.06) 1px, transparent 1px),
+                repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,0.04) 0deg, transparent 1deg, transparent 2deg, rgba(255,255,255,0.03) 3deg),
+                radial-gradient(circle at 30% 70%, rgba(255,255,255,0.05) 0%, transparent 40%),
+                radial-gradient(circle at 70% 30%, rgba(255,255,255,0.04) 0%, transparent 35%);
+            background-size:
+                180px 180px,
+                220px 220px,
+                120px 120px,
+                200px 200px,
+                160px 160px;
+            animation: filmGrain 20s ease-in-out infinite;
+            opacity: 0.8;
+        }
+
+        .grain-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            animation: particleFloat linear infinite;
+            box-shadow: 0 0 6px rgba(255,255,255,0.3);
+        }
+
+        .grain-particle:nth-child(1) { left: 12%; top: 20%; width: 3px; height: 3px; animation-duration: 8s; }
+        .grain-particle:nth-child(2) { left: 78%; top: 15%; width: 2px; height: 2px; animation-duration: 12s; animation-delay: -2s; }
+        .grain-particle:nth-child(3) { left: 35%; top: 75%; width: 4px; height: 4px; animation-duration: 10s; animation-delay: -4s; }
+        .grain-particle:nth-child(4) { left: 85%; top: 65%; width: 2px; height: 2px; animation-duration: 14s; animation-delay: -6s; }
+        .grain-particle:nth-child(5) { left: 20%; top: 85%; width: 3px; height: 3px; animation-duration: 9s; animation-delay: -1s; }
+        .grain-particle:nth-child(6) { left: 70%; top: 35%; width: 2px; height: 2px; animation-duration: 11s; animation-delay: -3s; }
+        .grain-particle:nth-child(7) { left: 45%; top: 8%; width: 3px; height: 3px; animation-duration: 13s; animation-delay: -5s; }
+        .grain-particle:nth-child(8) { left: 8%; top: 55%; width: 2px; height: 2px; animation-duration: 7s; animation-delay: -7s; }
+        .grain-particle:nth-child(9) { left: 92%; top: 45%; width: 3px; height: 3px; animation-duration: 15s; animation-delay: -9s; }
+        .grain-particle:nth-child(10) { left: 55%; top: 90%; width: 4px; height: 4px; animation-duration: 16s; animation-delay: -11s; }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 28rem;
+        }
+
+        .title {
+            font-size: 3.75rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 3rem;
+            letter-spacing: 0.25em;
+            text-shadow: 0 4px 20px rgba(255,255,255,0.3);
+            text-align: center;
+        }
+
+        .input-container {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        textarea {
+            width: 100%;
+            background: transparent;
+            color: white;
+            border: none;
+            outline: none;
+            resize: none;
+            min-height: 3.75rem;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.75rem;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        button:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+        }
+
+        button:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        button:not(:disabled):hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .footer {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.875rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- CSS Shader Background Final -->
+    <div style="position: fixed; inset: 0; z-index: -10;">
+        <div class="shader-bg"></div>
+        <div class="grain-overlay"></div>
+        <div style="position: absolute; inset: 0;">
+            <div class="grain-particle"></div>
+            <div class="grain-particle"></div>
+            <div class="grain-particle"></div>
+            <div class="grain-particle"></div>
+            <div class="grain-particle"></div>
+            <div class="grain-particle"></div>
+            <div class="grain-particle"></div>
+            <div class="grain-particle"></div>
+            <div class="grain-particle"></div>
+            <div class="grain-particle"></div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <h1 class="title">AURION</h1>
+
+        <div class="input-container">
+            <textarea placeholder="Tapez votre message..." rows="1"></textarea>
+            <div class="button-container">
+                <button>Envoyer</button>
+            </div>
+        </div>
+
+        <p class="footer">Interface IA - CSS Shader Final ✨</p>
+    </div>
+</body>
+</html>

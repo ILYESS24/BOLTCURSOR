@@ -1,5 +1,5 @@
-import OrchidsInterface from '~/components/orchids-interface';
+import Interface from '~/components/interface';
 
 export default function Index() {
-  return <OrchidsInterface />;
+  return <Interface />;
 }
