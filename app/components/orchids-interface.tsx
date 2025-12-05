@@ -25,7 +25,8 @@ const FinalInterface = () => {
         letterSpacing: '0.2em',
         textShadow: '0 0 30px rgba(255,255,255,0.3)',
         position: 'relative',
-        zIndex: 10
+        zIndex: 10,
+        fontFamily: 'Arial, sans-serif'
       }}>
         AURION
       </h1>
@@ -36,8 +37,6 @@ const FinalInterface = () => {
         borderRadius: '24px',
         padding: '16px',
         width: '500px',
-        boxShadow: '0 8px 30px rgba(0,0,0,0.24)',
-        transition: 'all 0.3s ease',
         position: 'relative',
         zIndex: 10
       }}>
