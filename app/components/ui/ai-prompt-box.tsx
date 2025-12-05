@@ -1288,7 +1288,7 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
 
               >
 
-                <Paperclip className="h-5 w-5 transition-colors" />
+                File
 
                 <input
 
@@ -1350,7 +1350,7 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
 
                   >
 
-                    <Globe className={cn("w-4 h-4", showSearch ? "text-[#1EAEDB]" : "text-inherit")} />
+                    <span className="text-base">{showSearch ? "🔍" : "🌐"}</span>
 
                   </motion.div>
 
@@ -1422,7 +1422,7 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
 
                   >
 
-                    <BrainCog className={cn("w-4 h-4", showThink ? "text-[#8B5CF6]" : "text-inherit")} />
+                    <span className="text-base">{showThink ? "🧠" : "🤔"}</span>
 
                   </motion.div>
 
@@ -1494,7 +1494,7 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
 
                   >
 
-                    <FolderCode className={cn("w-4 h-4", showCanvas ? "text-[#F97316]" : "text-inherit")} />
+                    <span className="text-base">{showCanvas ? "🎨" : "📁"}</span>
 
                   </motion.div>
 
