@@ -65,6 +65,9 @@ importers:
       '@lezer/highlight':
         specifier: 1.2.2
         version: 1.2.2
+      '@paper-design/shaders-react':
+        specifier: ^0.0.67
+        version: 0.0.67(@types/react@18.3.26)(react@18.3.1)
       '@radix-ui/react-dialog':
         specifier: 1.1.15
         version: 1.1.15(@types/react-dom@18.3.7(@types/react@18.3.26))(@types/react@18.3.26)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2019,6 +2022,18 @@ packages:
   '@opentelemetry/semantic-conventions@1.37.0':
     resolution: {integrity: sha512-JD6DerIKdJGmRp4jQyX5FlrQjA4tjOw1cvfsPAZXfOOEErMUHjPcPSICS+6WnM0nB0efSFARh0KAZss+bvExOA==}
     engines: {node: '>=14'}
+
+  '@paper-design/shaders-react@0.0.67':
+    resolution: {integrity: sha512-GQF5TMBiQu7jXMlZ9P0fuzGFWPmaAAwwFV7m+5zG614OJi5tGRhmh+svhFy11bLYtikGcFAyi9TugYjCJuBGPg==}
+    peerDependencies:
+      '@types/react': ^18 || ^19
+      react: ^18 || ^19
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
+  '@paper-design/shaders@0.0.67':
+    resolution: {integrity: sha512-PTJX2hWqerzRjOnhsbr4hxFRykku2xEtiYDSrybr3+/iwBbp5JVE0ffeKBa3VWTjpKPfhGilIx+qg3zCZui0Sg==}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -10543,6 +10558,15 @@ snapshots:
   '@opentelemetry/semantic-conventions@1.28.0': {}
 
   '@opentelemetry/semantic-conventions@1.37.0': {}
+
+  '@paper-design/shaders-react@0.0.67(@types/react@18.3.26)(react@18.3.1)':
+    dependencies:
+      '@paper-design/shaders': 0.0.67
+      react: 18.3.1
+    optionalDependencies:
+      '@types/react': 18.3.26
+
+  '@paper-design/shaders@0.0.67': {}
 
   '@pkgjs/parseargs@0.11.0':
     optional: true

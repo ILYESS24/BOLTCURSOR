@@ -1,27 +1,31 @@
-// VERSION FINALE OPTIMISÉE - React simple + apparence moderne
+// VERSION FINALE OPTIMISÉE - React simple + shader background
 import React, { useState } from "react";
+import { GradientBackground } from "./paper-design-shader-background";
 
 const FinalInterface = () => {
   const [message, setMessage] = useState("");
 
   return (
     <div style={{
+      position: 'relative',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
       width: '100vw',
       height: '100vh',
-      background: 'radial-gradient(125% 125% at 50% 101%, rgba(245,87,2,1) 10.5%, rgba(245,120,2,1) 16%, rgba(245,140,2,1) 17.5%, rgba(245,170,100,1) 25%, rgba(238,174,202,1) 40%, rgba(202,179,214,1) 65%, rgba(148,201,233,1) 100%)',
       color: 'white',
       fontFamily: 'system-ui, -apple-system, sans-serif'
     }}>
+      <GradientBackground />
       <h1 style={{
         fontSize: '5rem',
         fontWeight: 'bold',
         marginBottom: '4rem',
         letterSpacing: '0.2em',
-        textShadow: '0 0 30px rgba(255,255,255,0.3)'
+        textShadow: '0 0 30px rgba(255,255,255,0.3)',
+        position: 'relative',
+        zIndex: 10
       }}>
         AURION
       </h1>
@@ -33,7 +37,9 @@ const FinalInterface = () => {
         padding: '16px',
         width: '500px',
         boxShadow: '0 8px 30px rgba(0,0,0,0.24)',
-        transition: 'all 0.3s ease'
+        transition: 'all 0.3s ease',
+        position: 'relative',
+        zIndex: 10
       }}>
         <textarea
           value={message}
@@ -180,7 +186,9 @@ const FinalInterface = () => {
         marginTop: '4rem',
         textAlign: 'center',
         color: 'rgba(255,255,255,0.5)',
-        fontSize: '14px'
+        fontSize: '14px',
+        position: 'relative',
+        zIndex: 10
       }}>
         <p>Interface IA - Version Finale Optimisée</p>
         {message && (
