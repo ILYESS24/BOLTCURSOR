@@ -1,208 +1,133 @@
-// VERSION FINALE OPTIMISÉE - Background directement intégré
-import React, { useState } from "react";
-
-const FinalInterface = () => {
-  const [message, setMessage] = useState("");
-
+// PAGE HTML STATIQUE POUR TEST FINAL
+export default function OrchidsInterface() {
   return (
-    <div style={{
-      position: 'relative',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '100vw',
-      height: '100vh',
-      color: 'white',
-      fontFamily: 'system-ui, -apple-system, sans-serif',
-      backgroundColor: '#000000'
-    }}>
-      <h1 style={{
-        fontSize: '5rem',
-        fontWeight: 'bold',
-        marginBottom: '4rem',
-        letterSpacing: '0.2em',
-        textShadow: '0 0 30px rgba(255,255,255,0.3)',
-        position: 'relative',
-        zIndex: 10,
-        fontFamily: 'Arial, sans-serif'
-      }}>
-        AURION
-      </h1>
+    <html lang="fr">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>AURION - Interface IA</title>
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            body {
+              margin: 0;
+              padding: 0;
+              background-color: #000000;
+              color: white;
+              font-family: Arial, sans-serif;
+              width: 100vw;
+              height: 100vh;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+            }
 
-      <div style={{
-        backgroundColor: '#1F2023',
-        border: '1px solid #444444',
-        borderRadius: '24px',
-        padding: '16px',
-        width: '500px',
-        position: 'relative',
-        zIndex: 10
-      }}>
-        <textarea
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Décrivez votre application IA..."
-          style={{
-            width: '100%',
-            minHeight: '44px',
-            backgroundColor: 'transparent',
-            color: 'white',
-            border: 'none',
-            outline: 'none',
-            resize: 'none',
-            fontSize: '16px',
-            fontFamily: 'inherit',
-            marginBottom: '12px'
-          }}
-        />
+            h1 {
+              font-size: 5rem;
+              font-weight: bold;
+              margin-bottom: 4rem;
+              letter-spacing: 0.2em;
+              text-shadow: 0 0 30px rgba(255,255,255,0.3);
+            }
 
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}>
-          <div style={{display: 'flex', gap: '4px'}}>
+            .prompt-box {
+              background-color: #1F2023;
+              border: 1px solid #444444;
+              border-radius: 24px;
+              padding: 16px;
+              width: 500px;
+            }
+
+            textarea {
+              width: 100%;
+              min-height: 44px;
+              background-color: transparent;
+              color: white;
+              border: none;
+              outline: none;
+              resize: none;
+              font-size: 16px;
+              margin-bottom: 12px;
+            }
+
+            .button-row {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            }
+
+            .left-buttons {
+              display: flex;
+              gap: 4px;
+            }
+
+            button {
+              background: transparent;
+              border: none;
+              color: white;
+              font-size: 20px;
+              cursor: pointer;
+              padding: 8px;
+              border-radius: 8px;
+              transition: all 0.2s ease;
+              opacity: 0.7;
+            }
+
+            button:hover {
+              opacity: 1;
+              background-color: rgba(255,255,255,0.1);
+            }
+
+            .send-button {
+              background-color: white;
+              border-radius: 50%;
+              width: 32px;
+              height: 32px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 16px;
+            }
+
+            .footer {
+              margin-top: 4rem;
+              text-align: center;
+              color: rgba(255,255,255,0.5);
+              font-size: 14px;
+            }
+          `
+        }} />
+      </head>
+      <body>
+        <h1>AURION</h1>
+
+        <div className="prompt-box">
+          <textarea
+            placeholder="Décrivez votre application IA..."
+          />
+
+          <div className="button-row">
+            <div className="left-buttons">
+              <button title="Attacher un fichier">📎</button>
+              <button title="Recherche web">🌐</button>
+              <button title="Penser profondément">🧠</button>
+            </div>
+
             <button
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: 'white',
-                fontSize: '20px',
-                cursor: 'pointer',
-                padding: '8px',
-                borderRadius: '8px',
-                transition: 'all 0.2s ease',
-                opacity: 0.7
-              }}
-              onMouseOver={(e) => {
-                e.target.style.opacity = '1';
-                e.target.style.backgroundColor = 'rgba(255,255,255,0.1)';
-              }}
-              onMouseOut={(e) => {
-                e.target.style.opacity = '0.7';
-                e.target.style.backgroundColor = 'transparent';
-              }}
-              title="Attacher un fichier"
+              className="send-button"
+              title="Envoyer le message"
+              onClick={() => alert('Message envoyé !')}
             >
-              📎
-            </button>
-
-            <button
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: 'white',
-                fontSize: '20px',
-                cursor: 'pointer',
-                padding: '8px',
-                borderRadius: '8px',
-                transition: 'all 0.2s ease',
-                opacity: 0.7
-              }}
-              onMouseOver={(e) => {
-                e.target.style.opacity = '1';
-                e.target.style.backgroundColor = 'rgba(255,255,255,0.1)';
-              }}
-              onMouseOut={(e) => {
-                e.target.style.opacity = '0.7';
-                e.target.style.backgroundColor = 'transparent';
-              }}
-              title="Recherche web"
-            >
-              🌐
-            </button>
-
-            <button
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: 'white',
-                fontSize: '20px',
-                cursor: 'pointer',
-                padding: '8px',
-                borderRadius: '8px',
-                transition: 'all 0.2s ease',
-                opacity: 0.7
-              }}
-              onMouseOver={(e) => {
-                e.target.style.opacity = '1';
-                e.target.style.backgroundColor = 'rgba(255,255,255,0.1)';
-              }}
-              onMouseOut={(e) => {
-                e.target.style.opacity = '0.7';
-                e.target.style.backgroundColor = 'transparent';
-              }}
-              title="Penser profondément"
-            >
-              🧠
+              ⬆️
             </button>
           </div>
-
-          <button
-            onClick={() => {
-              if (message.trim()) {
-                alert(`Message envoyé: "${message}"`);
-                setMessage("");
-              }
-            }}
-            disabled={!message.trim()}
-            style={{
-              backgroundColor: message.trim() ? 'white' : 'rgba(255,255,255,0.1)',
-              border: 'none',
-              borderRadius: '50%',
-              width: '32px',
-              height: '32px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: message.trim() ? 'pointer' : 'not-allowed',
-              fontSize: '16px',
-              transition: 'all 0.2s ease',
-              opacity: message.trim() ? 1 : 0.5
-            }}
-            onMouseOver={(e) => {
-              if (message.trim()) {
-                e.target.style.backgroundColor = '#f0f0f0';
-                e.target.style.transform = 'scale(1.05)';
-              }
-            }}
-            onMouseOut={(e) => {
-              if (message.trim()) {
-                e.target.style.backgroundColor = 'white';
-                e.target.style.transform = 'scale(1)';
-              }
-            }}
-            title="Envoyer le message"
-          >
-            ⬆️
-          </button>
         </div>
-      </div>
 
-      <div style={{
-        marginTop: '4rem',
-        textAlign: 'center',
-        color: 'rgba(255,255,255,0.5)',
-        fontSize: '14px',
-        position: 'relative',
-        zIndex: 10
-      }}>
-        <p>Interface IA - Version Finale Optimisée</p>
-        {message && (
-          <p style={{
-            marginTop: '8px',
-            fontSize: '12px',
-            color: 'rgba(255,255,255,0.7)'
-          }}>
-            Caractères: {message.length}
-          </p>
-        )}
-      </div>
-    </div>
+        <div className="footer">
+          <p>Interface IA - Version Finale</p>
+          <p>Background noir - Test réussi !</p>
+        </div>
+      </body>
+    </html>
   );
-};
-
-export default function OrchidsInterface() {
-  return <FinalInterface />;
 }
