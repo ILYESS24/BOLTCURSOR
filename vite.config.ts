@@ -16,7 +16,7 @@ export default defineConfig((config) => {
       },
     },
     optimizeDeps: {
-      include: ['istextorbinary'],
+      include: ['istextorbinary', '@paper-design/shaders-react'],
       exclude: ['path'],
     },
     plugins: [
