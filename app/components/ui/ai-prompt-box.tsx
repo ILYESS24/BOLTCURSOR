@@ -852,7 +852,7 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
 
   const { onSend = () => {}, isLoading = false, placeholder = "Décrivez votre application IA...", className } = props;
 
-  // Force update cache
+  // Interface simplifiée - suppression complète des emojis
 
   const [input, setInput] = useState("");
 
