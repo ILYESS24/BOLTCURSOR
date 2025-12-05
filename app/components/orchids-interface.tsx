@@ -1,6 +1,5 @@
-// VERSION FINALE OPTIMISÉE - React simple + shader background
+// VERSION FINALE OPTIMISÉE - Background directement intégré
 import React, { useState } from "react";
-import { GradientBackground } from "./paper-design-shader-background";
 
 const FinalInterface = () => {
   const [message, setMessage] = useState("");
@@ -15,9 +14,9 @@ const FinalInterface = () => {
       width: '100vw',
       height: '100vh',
       color: 'white',
-      fontFamily: 'system-ui, -apple-system, sans-serif'
+      fontFamily: 'system-ui, -apple-system, sans-serif',
+      backgroundColor: '#000000'
     }}>
-      <GradientBackground />
       <h1 style={{
         fontSize: '5rem',
         fontWeight: 'bold',
