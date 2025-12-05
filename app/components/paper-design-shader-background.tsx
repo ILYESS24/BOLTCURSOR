@@ -1,6 +1,24 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import { GrainGradient } from "@paper-design/shaders-react"
 
 export function GradientBackground() {
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  if (!isClient) {
+    // Rendu côté serveur - gradient CSS temporaire
+    return (
+      <div className="absolute inset-0 -z-10 bg-black">
+        <div className="w-full h-full bg-gradient-to-br from-orange-400 via-yellow-400 to-pink-500 opacity-20 animate-pulse"></div>
+      </div>
+    )
+  }
+
   return (
     <div className="absolute inset-0 -z-10">
       <GrainGradient
