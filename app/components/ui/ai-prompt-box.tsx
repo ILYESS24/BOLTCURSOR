@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
@@ -348,13 +348,13 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({
 
 }) => {
 
-  const [time, setTime] = React.useState(0);
+  const [time, setTime] = useState(0);
 
-  const timerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
 
 
-  React.useEffect(() => {
+  useEffect(() => {
 
     if (isRecording) {
 
@@ -620,7 +620,7 @@ const PromptInput = React.forwardRef<HTMLDivElement, PromptInputProps>(
 
   ) => {
 
-    const [internalValue, setInternalValue] = React.useState(value || "");
+    const [internalValue, setInternalValue] = useState(value || "");
 
     const handleChange = (newValue: string) => {
 
@@ -718,11 +718,11 @@ const PromptInputTextarea: React.FC<PromptInputTextareaProps & React.ComponentPr
 
   const { value, setValue, maxHeight, onSubmit, disabled } = usePromptInput();
 
-  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
 
 
-  React.useEffect(() => {
+  useEffect(() => {
 
     if (disableAutosize || !textareaRef.current) return;
 
@@ -888,27 +888,27 @@ interface PromptInputBoxProps {
 
 export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref: React.Ref<HTMLDivElement>) => {
 
-  const { onSend = () => {}, isLoading = false, placeholder = "Type your message here...", className } = props;
+  const { onSend = () => {}, isLoading = false, placeholder = "Décrivez votre application IA...", className } = props;
 
-  const [input, setInput] = React.useState("");
+  const [input, setInput] = useState("");
 
-  const [files, setFiles] = React.useState<File[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
 
-  const [filePreviews, setFilePreviews] = React.useState<{ [key: string]: string }>({});
+  const [filePreviews, setFilePreviews] = useState<{ [key: string]: string }>({});
 
-  const [selectedImage, setSelectedImage] = React.useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const [isRecording, setIsRecording] = React.useState(false);
+  const [isRecording, setIsRecording] = useState(false);
 
-  const [showSearch, setShowSearch] = React.useState(false);
+  const [showSearch, setShowSearch] = useState(false);
 
-  const [showThink, setShowThink] = React.useState(false);
+  const [showThink, setShowThink] = useState(false);
 
-  const [showCanvas, setShowCanvas] = React.useState(false);
+  const [showCanvas, setShowCanvas] = useState(false);
 
-  const uploadInputRef = React.useRef<HTMLInputElement>(null);
+  const uploadInputRef = useRef<HTMLInputElement>(null);
 
-  const promptBoxRef = React.useRef<HTMLDivElement>(null);
+  const promptBoxRef = useRef<HTMLDivElement>(null);
 
 
 
@@ -970,7 +970,7 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
 
 
 
-  const handleDragOver = React.useCallback((e: React.DragEvent) => {
+  const handleDragOver = useCallback((e: React.DragEvent) => {
 
     e.preventDefault();
 
@@ -980,7 +980,7 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
 
 
 
-  const handleDragLeave = React.useCallback((e: React.DragEvent) => {
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
 
     e.preventDefault();
 
@@ -990,7 +990,7 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
 
 
 
-  const handleDrop = React.useCallback((e: React.DragEvent) => {
+  const handleDrop = useCallback((e: React.DragEvent) => {
 
     e.preventDefault();
 
@@ -1022,7 +1022,7 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
 
 
 
-  const handlePaste = React.useCallback((e: ClipboardEvent) => {
+  const handlePaste = useCallback((e: ClipboardEvent) => {
 
     const items = e.clipboardData?.items;
 
@@ -1052,7 +1052,7 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
 
 
 
-  React.useEffect(() => {
+  useEffect(() => {
 
     document.addEventListener("paste", handlePaste);
 
@@ -1282,7 +1282,7 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
 
                 onClick={() => uploadInputRef.current?.click()}
 
-                className="flex h-8 w-8 text-[#9CA3AF] cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-gray-600/30 hover:text-[#D1D5DB]"
+                className="flex h-8 w-8 text-white cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-white/20 hover:text-white"
 
                 disabled={isRecording}
 
@@ -1332,7 +1332,7 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
 
                     ? "bg-[#1EAEDB]/15 border-[#1EAEDB] text-[#1EAEDB]"
 
-                    : "bg-transparent border-transparent text-[#9CA3AF] hover:text-[#D1D5DB]"
+                    : "bg-transparent border-transparent text-white/70 hover:text-white hover:bg-white/10"
 
                 )}
 
@@ -1404,7 +1404,7 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
 
                     ? "bg-[#8B5CF6]/15 border-[#8B5CF6] text-[#8B5CF6]"
 
-                    : "bg-transparent border-transparent text-[#9CA3AF] hover:text-[#D1D5DB]"
+                    : "bg-transparent border-transparent text-white/70 hover:text-white hover:bg-white/10"
 
                 )}
 
@@ -1476,7 +1476,7 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
 
                     ? "bg-[#F97316]/15 border-[#F97316] text-[#F97316]"
 
-                    : "bg-transparent border-transparent text-[#9CA3AF] hover:text-[#D1D5DB]"
+                    : "bg-transparent border-transparent text-white/70 hover:text-white hover:bg-white/10"
 
                 )}
 
@@ -1574,7 +1574,7 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
 
                   ? "bg-white hover:bg-white/80 text-[#1F2023]"
 
-                  : "bg-transparent hover:bg-gray-600/30 text-[#9CA3AF] hover:text-[#D1D5DB]"
+                  : "bg-white/10 hover:bg-white/20 text-white/70 hover:text-white"
 
               )}
 
