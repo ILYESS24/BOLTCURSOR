@@ -1,10 +1,15 @@
-// VERSION FINALE CORRIGÉE - React normal avec background intégré
+// VERSION FINALE AVEC SHADER BACKGROUND
+import React, { useState } from "react";
+import { GradientBackground } from "./paper-design-shader-background";
+
 export default function OrchidsInterface() {
+  const [message, setMessage] = useState("");
+
   return (
     <div style={{
+      position: 'relative',
       width: '100vw',
       height: '100vh',
-      backgroundColor: '#000000',
       color: 'white',
       fontFamily: 'Arial, sans-serif',
       display: 'flex',
@@ -14,6 +19,7 @@ export default function OrchidsInterface() {
       margin: 0,
       padding: 0
     }}>
+      <GradientBackground />
       <h1 style={{
         fontSize: '5rem',
         fontWeight: 'bold',
@@ -32,6 +38,8 @@ export default function OrchidsInterface() {
         width: '500px'
       }}>
         <textarea
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
           placeholder="Décrivez votre application IA..."
           style={{
             width: '100%',
@@ -127,7 +135,12 @@ export default function OrchidsInterface() {
             }}
             onMouseOver={(e) => e.target.style.backgroundColor = '#f0f0f0'}
             onMouseOut={(e) => e.target.style.backgroundColor = 'white'}
-            onClick={() => alert('Message envoyé !')}
+            onClick={() => {
+              if (message.trim()) {
+                alert(`Message envoyé: "${message}"`);
+                setMessage("");
+              }
+            }}
             title="Envoyer le message"
           >
             ⬆️
@@ -141,8 +154,17 @@ export default function OrchidsInterface() {
         color: 'rgba(255,255,255,0.5)',
         fontSize: '14px'
       }}>
-        <p>Interface IA - Version Finale Corrigée</p>
-        <p>Background noir intégré - Code vérifié ! ✅</p>
+        <p>Interface IA - Version Finale avec Shader</p>
+        <p>Background GrainGradient - Effet visuel premium ! ✨</p>
+        {message && (
+          <p style={{
+            marginTop: '8px',
+            fontSize: '12px',
+            color: 'rgba(255,255,255,0.7)'
+          }}>
+            Caractères: {message.length}
+          </p>
+        )}
       </div>
     </div>
   );
