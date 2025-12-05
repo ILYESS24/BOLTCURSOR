@@ -47,7 +47,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
       }, { status: 400 });
     }
     
-    const { message, model = 'deepseek-chat' } = body;
+    const { message, model = 'openai/gpt-4-turbo' } = body;
 
     if (!message || typeof message !== 'string') {
       return json({
@@ -97,8 +97,22 @@ export async function action({ request, context }: ActionFunctionArgs) {
     } catch (e) {
       const error = e as Error;
       
-      // Détecter les erreurs de quota/payment
+      // Détecter les erreurs d'authentification (401)
       const status = (error as any)?.status || 500;
+      if ((error as any)?.isAuthError || status === 401 || 
+          error.message.includes('invalid') || error.message.includes('expired') ||
+          error.message.includes('not found') || error.message.includes('User not found')) {
+        return json({
+          error: 'Clé API invalide',
+          message: 'La clé API OpenRouter est invalide, expirée ou n\'existe pas. Veuillez vérifier votre clé API dans les variables d\'environnement Cloudflare Pages.',
+          details: error.message,
+          requestId,
+          timestamp: new Date().toISOString(),
+          help: 'Pour configurer votre clé API OpenRouter: 1) Allez sur https://openrouter.ai/keys 2) Créez une nouvelle clé API 3) Ajoutez-la dans Cloudflare Pages → Settings → Environment Variables → OPENROUTER_API_KEY'
+        }, { status: 401 });
+      }
+      
+      // Détecter les erreurs de quota/payment
       if ((error as any)?.isQuotaError || status === 429 || status === 402 || 
           error.message.includes('quota') || error.message.includes('insufficient') ||
           error.message.includes('payment') || error.message.includes('billing') ||

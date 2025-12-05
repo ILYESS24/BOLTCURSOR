@@ -52,7 +52,7 @@ class AIService {
     this.openaiApiKey = env?.OPENAI_API_KEY || process.env.OPENAI_API_KEY || '';
     this.anthropicApiKey = env?.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY || '';
     this.deepseekApiKey = env?.DEEPSEEK_API_KEY || process.env.DEEPSEEK_API_KEY || '';
-    this.openrouterApiKey = env?.OPENROUTER_API_KEY || process.env.OPENROUTER_API_KEY || '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';
+    this.openrouterApiKey = env?.OPENROUTER_API_KEY || process.env.OPENROUTER_API_KEY || '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';
   }
 
   public async chat(request: ChatRequest): Promise<ChatResponse> {
@@ -412,6 +412,15 @@ class AIService {
         errorData = { message: errorText };
       }
 
+      // Détecter les erreurs d'authentification (401)
+      if (response.status === 401) {
+        const authError = new Error(`Clé API OpenRouter invalide ou expirée. Veuillez vérifier votre clé API dans les variables d'environnement Cloudflare.`);
+        (authError as any).status = 401;
+        (authError as any).isAuthError = true;
+        (authError as any).provider = 'openrouter';
+        throw authError;
+      }
+
       // Détecter les erreurs de quota/rate limit/payment
       if (response.status === 429 || response.status === 402 ||
           errorText.includes('quota') || errorText.includes('insufficient') ||
@@ -442,15 +451,18 @@ class AIService {
     };
   }
 
-  public async fetchOpenRouterModels(): Promise<any[]> {
-    if (!this.openrouterApiKey) {
+  public async fetchOpenRouterModels(env?: Env): Promise<any[]> {
+    // Utiliser la clé API depuis env si fourni, sinon utiliser celle du constructeur
+    const apiKey = env?.OPENROUTER_API_KEY || this.openrouterApiKey;
+    
+    if (!apiKey) {
       throw new Error('Clé API OpenRouter non configurée');
     }
 
     const response = await fetch('https://openrouter.ai/api/v1/models', {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${this.openrouterApiKey}`,
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json'
       }
     });
@@ -500,7 +512,7 @@ export const aiService = {
   analyzeCode: (code: string, language?: string, env?: Env) => getAIService(env).analyzeCode(code, language),
   generateDocumentation: (code: string, language?: string, env?: Env) => getAIService(env).generateDocumentation(code, language),
   getAvailableModels: (env?: Env) => getAIService(env).getAvailableModels(),
-  fetchOpenRouterModels: (env?: Env) => getAIService(env).fetchOpenRouterModels(),
+  fetchOpenRouterModels: (env?: Env) => getAIService(env).fetchOpenRouterModels(env),
   isConfigured: (env?: Env) => getAIService(env).isConfigured(),
   getConfigurationStatus: (env?: Env) => getAIService(env).getConfigurationStatus()
 };
